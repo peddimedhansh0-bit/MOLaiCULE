@@ -1,4 +1,7 @@
 streamlit
-google-generativeai
 rdkit==2026.3.6
+google-genai
 python-dotenv
+requests
+pandas
+reportlab
