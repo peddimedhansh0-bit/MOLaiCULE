@@ -73,14 +73,15 @@ if "screening_history" not in st.session_state:
 # PUBCHEM NAME → SMILES
 # ============================================================
 
+from urllib.parse import quote
+
 def get_smiles_from_pubchem(name):
     try:
         encoded_name = quote(name.strip())
 
         url = (
-            "https://pubchem.ncbi.nlm.nih.gov/rest/pug/"
-            f"compound/name/{encoded_name}/property/"
-            "CanonicalSMILES/JSON"
+            "https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/"
+            f"{encoded_name}/property/CanonicalSMILES/JSON"
         )
 
         response = requests.get(url, timeout=10)
@@ -95,9 +96,10 @@ def get_smiles_from_pubchem(name):
         if not properties:
             return None
 
-        return properties[0].get("ConnectivitySMILES")
+        return properties[0]["CanonicalSMILES"]
 
-    except Exception:
+    except Exception as e:
+        st.error(f"PubChem lookup failed: {e}")  # temporary for debugging
         return None
 
 # ============================================================
@@ -175,9 +177,9 @@ def analyze_molecule(identifier):
     if molecule is None:
 
         smiles = get_smiles_from_pubchem(
-            identifier
+            identifier   
         )
-
+        
         if smiles:
 
             molecule = Chem.MolFromSmiles(
