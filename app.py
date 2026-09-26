@@ -432,6 +432,30 @@ with st.sidebar:
     st.caption("⚙ Settings")
     st.caption("molAIcule • v1.0 MVP")
 
+# ============================================================
+# COMPOUND SCREENING SESSION STATE
+# ============================================================
+
+if "screening_results" not in st.session_state:
+    st.session_state["screening_results"] = None
+
+if "screening_target" not in st.session_state:
+    st.session_state["screening_target"] = None
+
+if "screening_goal" not in st.session_state:
+    st.session_state["screening_goal"] = ""
+
+if "screening_criteria" not in st.session_state:
+    st.session_state["screening_criteria"] = []
+
+if "screening_ai_explanation" not in st.session_state:
+    st.session_state["screening_ai_explanation"] = None
+
+if "screening_chat_history" not in st.session_state:
+    st.session_state["screening_chat_history"] = []
+
+if "screening_history" not in st.session_state:
+    st.session_state["screening_history"] = []
 
 # ============================================================
 # DISPLAY SELECTED MODULE
