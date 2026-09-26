@@ -27,7 +27,7 @@ from reportlab.platypus import (
     TableStyle,
     PageBreak
 )
-
+from urllib.parse import quote
 
 # ============================================================
 # LOAD ENVIRONMENT VARIABLES
@@ -74,13 +74,8 @@ if "screening_history" not in st.session_state:
 # ============================================================
 
 def get_smiles_from_pubchem(name):
-
     try:
-
-        encoded_name = requests.utils.quote(
-            name.strip(),
-            safe=""
-        )
+        encoded_name = quote(name.strip())
 
         url = (
             "https://pubchem.ncbi.nlm.nih.gov/rest/pug/"
@@ -88,34 +83,22 @@ def get_smiles_from_pubchem(name):
             "CanonicalSMILES/JSON"
         )
 
-        response = requests.get(
-            url,
-            timeout=10
-        )
+        response = requests.get(url, timeout=10)
 
         if response.status_code != 200:
             return None
 
         data = response.json()
 
-        properties = data.get(
-            "PropertyTable",
-            {}
-        ).get(
-            "Properties",
-            []
-        )
+        properties = data.get("PropertyTable", {}).get("Properties", [])
 
         if not properties:
             return None
 
-        return properties[0].get(
-            "ConnectivitySMILES"
-        )
+        return properties[0].get("ConnectivitySMILES")
 
     except Exception:
         return None
-
 
 # ============================================================
 # COMPUTATIONAL INDICATORS
